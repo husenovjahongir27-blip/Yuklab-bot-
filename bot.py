@@ -2,6 +2,8 @@ import logging
 import os
 import re
 import tempfile
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from telegram import Update
 from telegram.ext import (
@@ -99,11 +101,30 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             await status_message.edit_text("Videoni yuborishda xatolik yuz berdi.")
 
 
+class _HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self) -> None:
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
+
+    def log_message(self, format, *args):  # noqa: A002 - suppress default logging
+        pass
+
+
+def _run_health_server() -> None:
+    # Render "Web Service" turi portni tinglashni talab qiladi.
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(("0.0.0.0", port), _HealthCheckHandler)
+    server.serve_forever()
+
+
 def main() -> None:
     if not BOT_TOKEN:
         raise RuntimeError(
             "BOT_TOKEN muhit o'zgaruvchisi (environment variable) topilmadi."
         )
+
+    threading.Thread(target=_run_health_server, daemon=True).start()
 
     application = Application.builder().token(BOT_TOKEN).build()
 
