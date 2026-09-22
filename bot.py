@@ -26,15 +26,19 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN")
 # Telegram bot API orqali fayl yuborishning standart chegarasi ~50MB
 MAX_FILE_SIZE = 50 * 1024 * 1024
 
-FACEBOOK_URL_PATTERN = re.compile(
-    r"(https?://(?:www\.|web\.|m\.)?(?:facebook\.com|fb\.watch)/\S+)"
+GENERIC_URL_PATTERN = re.compile(r"(https?://\S+)")
+
+# Foydalanuvchiga qanday saytlarni qo'llab-quvvatlashini ko'rsatish uchun
+SUPPORTED_SITES_TEXT = (
+    "Facebook, Instagram, TikTok, YouTube, Twitter/X, Pinterest, Reddit va "
+    "yana ko'plab boshqa ijtimoiy tarmoqlar"
 )
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        "Salom! Menga Facebook video havolasini yuboring, men uni siz uchun "
-        "yuklab beraman.\n\n"
+        "Salom! Menga video havolasini yuboring, men uni siz uchun yuklab "
+        f"beraman.\n\nQo'llab-quvvatlanadigan tarmoqlar: {SUPPORTED_SITES_TEXT}.\n\n"
         "Eslatma: fayl hajmi 50MB dan katta bo'lsa, Telegram bot API orqali "
         "yuborib bo'lmaydi."
     )
@@ -42,12 +46,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     text = update.message.text or ""
-    match = FACEBOOK_URL_PATTERN.search(text)
+    match = GENERIC_URL_PATTERN.search(text)
 
     if not match:
         await update.message.reply_text(
-            "Iltimos, to'g'ri Facebook video havolasini yuboring "
-            "(masalan: https://www.facebook.com/.../videos/...)."
+            "Iltimos, video havolasini yuboring (masalan Facebook, Instagram, "
+            "TikTok, YouTube va h.k.)."
         )
         return
 
@@ -73,7 +77,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             logger.exception("yt-dlp xatosi: %s", exc)
             await status_message.edit_text(
                 "Videoni yuklab bo'lmadi. Havola noto'g'ri, video ochiq "
-                "(public) emas, yoki Facebook formatini o'zgartirgan bo'lishi "
+                "(public) emas, yoki bu sayt hali qo'llab-quvvatlanmasligi "
                 "mumkin."
             )
             return
