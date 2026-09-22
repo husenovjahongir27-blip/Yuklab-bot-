@@ -1,7 +1,9 @@
-# Facebook Video Yuklovchi Telegram Bot
+# Ko'p-tarmoqli Video Yuklovchi Telegram Bot
 
-Foydalanuvchi Facebook video havolasini yuborsa, bot videoni yuklab olib,
-Telegram orqali qaytarib beradi.
+Foydalanuvchi Facebook, Instagram, TikTok, YouTube, Twitter/X va boshqa
+ko'plab ijtimoiy tarmoqlardan video havolasini yuborsa, bot videoni yuklab
+olib, Telegram orqali qaytarib beradi (`yt-dlp` kutubxonasi 1000+ saytni
+qo'llab-quvvatlaydi).
 
 ## 1. Telegram bot yaratish
 
@@ -56,13 +58,16 @@ python bot.py
 - **Fayl hajmi cheklovi**: Telegram bot API orqali 50MB dan katta faylni
   yuborib bo'lmaydi. Katta videolar uchun local Bot API server kerak bo'ladi
   (murakkabroq sozlash talab qiladi).
-- **Facebook o'zgarishlari**: Facebook video sahifalarining tuzilishini
-  vaqti-vaqti bilan o'zgartiradi. Agar bot ishlamay qolsa, birinchi navbatda
-  `yt-dlp`ni yangilang:
+- **Sayt o'zgarishlari**: Ijtimoiy tarmoqlar sahifa tuzilishini vaqti-vaqti
+  bilan o'zgartiradi. Agar bot ma'lum bir sayt uchun ishlamay qolsa, birinchi
+  navbatda `yt-dlp`ni yangilang:
   ```bash
   pip install -U yt-dlp
   ```
 - Bot faqat **ochiq (public)** videolarni yuklay oladi — maxfiy (faqat
-  do'stlar uchun) videolarni yuklab bo'lmaydi.
-- Facebook'ning foydalanish shartlariga (Terms of Service) rioya qiling —
-  botni faqat shaxsiy/ta'lim maqsadida ishlatish tavsiya etiladi.
+  do'stlar/kuzatuvchilar uchun) videolarni yuklab bo'lmaydi.
+- **Instagram va TikTok**da ba'zan qo'shimcha tekshiruv (login/cookies) talab
+  qilinishi mumkin — bunday hollarda yt-dlp xato qaytaradi. Bu holat uchun
+  keyinroq cookies qo'llab-quvvatlashini qo'shishimiz mumkin.
+- Har bir platformaning foydalanish shartlariga (Terms of Service) rioya
+  qiling — botni faqat shaxsiy/ta'lim maqsadida ishlatish tavsiya etiladi.
