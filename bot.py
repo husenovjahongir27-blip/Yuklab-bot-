@@ -67,6 +67,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "quiet": True,
             "no_warnings": True,
             "noplaylist": True,
+            # YouTube ayrim videolarda "Failed to extract any player
+            # response" xatosini beradi — android klientdan foydalanish
+            # bu muammoni ko'pincha chetlab o'tadi.
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["android", "web"],
+                }
+            },
         }
 
         # Ba'zi saytlar (YouTube, Instagram) ayrim videolar uchun login
