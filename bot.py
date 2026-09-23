@@ -69,6 +69,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "noplaylist": True,
         }
 
+        # Ba'zi saytlar (YouTube, Instagram) ayrim videolar uchun login
+        # (cookies) talab qiladi. COOKIES_FILE muhit o'zgaruvchisi orqali
+        # cookies.txt faylini ko'rsatishingiz mumkin.
+        cookies_file = os.environ.get("COOKIES_FILE")
+        if cookies_file and os.path.exists(cookies_file):
+            ydl_opts["cookiefile"] = cookies_file
+
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(url, download=True)
